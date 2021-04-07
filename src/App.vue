@@ -10,7 +10,16 @@
     <button @click="togglePara">Toggle Paragraph</button>
   </div>
   <div class="container">
-    <transition name="fade-button" mode="out-in">
+    <transition
+      name="fade-button"
+      mode="out-in"
+      @before-enter="beforeEnter"
+      @before-leave="beforeLeave"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @after-leave="afterLeave"
+      @leave="leave"
+    >
       <button @click="showUsers" v-if="!usersAreVisible">Show Users</button>
       <button @click="hideUsers" v-else>Hide Users</button>
     </transition>
@@ -37,6 +46,30 @@ export default {
     };
   },
   methods: {
+    beforeEnter(el) {
+      console.log('BEFORE ENTER');
+      console.log(el);
+    },
+    enter(el) {
+      console.log('ENTER');
+      console.log(el);
+    },
+    beforeLeave(el) {
+      console.log('BEFORE LEAVE');
+      console.log(el);
+    },
+    afterEnter(el) {
+      console.log('AFTER LEAVE');
+      console.log(el);
+    },
+    afterLeave(el) {
+      console.log('AFTER LEAVE');
+      console.log(el);
+    },
+    leave(el) {
+      console.log('LEAVE');
+      console.log(el);
+    },
     showDialog() {
       this.dialogIsVisible = true;
     },
