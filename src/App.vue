@@ -5,21 +5,25 @@
   </div>
   <div class="container">
     <transition>
-      <p v-if="paraIsVisible">Some text is here</p>
+      <p
+        :css="false"
+        v-if="paraIsVisible"
+        @before-enter="beforeEnter"
+        @before-leave="beforeLeave"
+        @enter="enter"
+        @after-enter="afterEnter"
+        @after-leave="afterLeave"
+        @leave="leave"
+        @enter-cancelled="enterCancel"
+        @leave-cancelled="leaveCancel"
+      >
+        Some text is here
+      </p>
     </transition>
     <button @click="togglePara">Toggle Paragraph</button>
   </div>
   <div class="container">
-    <transition
-      name="fade-button"
-      mode="out-in"
-      @before-enter="beforeEnter"
-      @before-leave="beforeLeave"
-      @enter="enter"
-      @after-enter="afterEnter"
-      @after-leave="afterLeave"
-      @leave="leave"
-    >
+    <transition name="fade-button" mode="out-in">
       <button @click="showUsers" v-if="!usersAreVisible">Show Users</button>
       <button @click="hideUsers" v-else>Hide Users</button>
     </transition>
@@ -43,20 +47,32 @@ export default {
       dialogIsVisible: false,
       paraIsVisible: false,
       usersAreVisible: false,
+      enterInterval: null,
+      leaveInterval: null,
     };
   },
   methods: {
     beforeEnter(el) {
       console.log('BEFORE ENTER');
       console.log(el);
+      el.style.opacity = 0;
     },
-    enter(el) {
+    enter(el, done) {
       console.log('ENTER');
       console.log(el);
+      let round = 1;
+      this.enterInterval = setInterval(() => {
+        el.style.opacity = round * 0.01;
+        if (round > 100) {
+          clearInterval(this.enterInterval);
+          done();
+        }
+      }, 20);
     },
     beforeLeave(el) {
       console.log('BEFORE LEAVE');
       console.log(el);
+      el.style.opacity = 1;
     },
     afterEnter(el) {
       console.log('AFTER LEAVE');
@@ -66,9 +82,25 @@ export default {
       console.log('AFTER LEAVE');
       console.log(el);
     },
-    leave(el) {
+    leave(el, done) {
       console.log('LEAVE');
       console.log(el);
+      let round = 1;
+      this.leaveInterval = setInterval(() => {
+        el.style.opacity = 1 - round * 0.01;
+        if (round > 100) {
+          clearInterval(this.leaveInterval);
+          done();
+        }
+      }, 20);
+    },
+    enterCancel(el) {
+      console.log(el);
+      clearInterval(this.enterInterval);
+    },
+    leaveCancel(el) {
+      console.log(el);
+      clearInterval(this.leaveInterval);
     },
     showDialog() {
       this.dialogIsVisible = true;
