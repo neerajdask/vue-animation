@@ -1,5 +1,5 @@
 <template>
-  <div class="backdrop" @click="$emit('close')" v-if="open"></div>
+  <div v-if="open" class="backdrop" @click="$emit('close')"></div>
   <transition name="modal">
     <dialog open v-if="open">
       <slot></slot>
@@ -37,6 +37,7 @@ dialog {
   background-color: white;
   z-index: 100;
   border: none;
+  /* animation: modal 0.3s ease-out forwards; */
 }
 
 .modal-enter-active {
@@ -44,7 +45,7 @@ dialog {
 }
 
 .modal-leave-active {
-  animation: modal 0.3s reverse;
+  animation: modal 0.3s ease-in reverse;
 }
 
 @keyframes modal {
@@ -52,9 +53,10 @@ dialog {
     opacity: 0;
     transform: translateY(-50px) scale(0.9);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0px) scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 </style>
