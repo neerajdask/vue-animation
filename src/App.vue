@@ -14,8 +14,8 @@
         @after-enter="afterEnter"
         @after-leave="afterLeave"
         @leave="leave"
-        @enter-cancelled="enterCancel"
-        @leave-cancelled="leaveCancel"
+        @enter-cancel="enterCancel"
+        @leave-cancel="leaveCancel"
       >
         Some text is here
       </p>
